@@ -52,7 +52,24 @@ function buildReverse() {
   BUILT_SIZE = EN.size;
 }
 
-const fill = (p: Pattern, m: RegExpMatchArray) => p.out.replace(/\{(\w+)\}/g, (_, k: string) => m[p.params.indexOf(k) + 1] ?? `{${k}}`);
+const MONEY = /(?:[A-Z]{1,3}\$|[€£¥$])\s?\d[\d.,]*/;
+const fill = (p: Pattern, m: RegExpMatchArray) => p.out.replace(/\{(\w+)\}/g, (_, k: string) => retranslateLeaf(m[p.params.indexOf(k) + 1] ?? `{${k}}`));
+
+/** Valor de parâmetro guardado em outro idioma: tenta a tradução direta (com valores em moeda local normalizados para "$"). */
+function retranslateLeaf(text: string): string {
+  const map = LANG === 'en' ? EN : REV!;
+  const direct = map.get(text);
+  if (direct) return direct;
+  const money = text.match(MONEY);
+  if (money) {
+    const num = money[0].replace(/^\D*/, '');
+    for (const n of [num, num.replace(/,/g, '.')]) {
+      const norm = map.get(text.replace(MONEY, '$' + n));
+      if (norm) return norm.replace(/\$[\d.,]+/, money[0]);
+    }
+  }
+  return text;
+}
 
 /**
  * Texto guardado no histórico em outro idioma: traduz de novo o que for mensagem fixa ou com parâmetros

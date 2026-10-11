@@ -64,8 +64,8 @@ export function AgendaPanel({ g }: { g: GameState }) {
               <div className="act" key={a.id}>
                 <div className="act-ic" style={{ background: `${a.color}22` }}>{a.icon}</div>
                 <div className="grow">
-                  <div className="act-name">{a.name}</div>
-                  <div className="small muted">{a.hint}</div>
+                  <div className="act-name">{t(a.name)}</div>
+                  <div className="small muted">{t(a.hint)}</div>
                 </div>
                 <div className="stepper">
                   <button onClick={() => setAgenda(a.id, h - 2)} disabled={h <= 0} aria-label={t('Menos {name}', { name: t(a.name) })}>−</button>

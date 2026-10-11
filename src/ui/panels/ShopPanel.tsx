@@ -97,7 +97,7 @@ function StoreSheet({ g, store, onClose }: { g: GameState; store: StoreDef; onCl
           <span style={{ fontSize: 30 }}>{store.icon}</span>
           <div className="grow">
             <div className="hud-name">{store.name}</div>
-            <div className="small muted">{TIER_LABEL[store.tier]}{store.region !== 'all' ? ` · ${REGION_LABEL[store.region].flag} ${REGION_LABEL[store.region].name}` : ''}</div>
+            <div className="small muted">{t(TIER_LABEL[store.tier])}{store.region !== 'all' ? ` · ${REGION_LABEL[store.region].flag} ${REGION_LABEL[store.region].name}` : ''}</div>
           </div>
           <button className="icon-btn" onClick={onClose} aria-label={t('Fechar')}>✕</button>
         </div>
@@ -177,7 +177,7 @@ function StoreCard({ g, s, onOpen }: { g: GameState; s: StoreDef; onOpen: (s: St
         <span style={{ fontSize: 26 }}>{s.icon}</span>
         <div className="grow" style={{ textAlign: 'left' }}>
           <b>{t(s.name)}</b>
-          <div className="small faint">{TIER_LABEL[s.tier]} · {s.items.length}  {t('itens')}</div>
+          <div className="small faint">{t(TIER_LABEL[s.tier])} · {s.items.length}  {t('itens')}</div>
         </div>
         {trend && <span className={`chip ${trend.status < 1 ? 'bad' : 'good'}`}>{trend.status < 1 ? t('🧊 em baixa') : t('🔥 em alta')}</span>}
       </div>
@@ -328,7 +328,7 @@ export function ShopPanel({ g }: { g: GameState }) {
   if (ageYears(g) < MIN_SHOP_AGE) {
     return <div className="card empty"><span className="e">🛍️</span>{t('As compras online abrem aos')} {MIN_SHOP_AGE}  {t('anos. Até lá, peça aos seus pais.')}</div>;
   }
-  const tabs: { id: Sub; label: string }[] = [{ id: 'lojas', label: '🏬 Lojas' }, { id: 'ofertas', label: `🏷️ Ofertas${g.shop.offers.length ? ` ${g.shop.offers.length}` : ''}` }, { id: 'tendencias', label: t('📈 Preços') }, { id: 'inventario', label: '🎒 Bens' }];
+  const tabs: { id: Sub; label: string }[] = [{ id: 'lojas', label: '🏬 Lojas' }, { id: 'ofertas', label: `${t('🏷️ Ofertas')}${g.shop.offers.length ? ` ${g.shop.offers.length}` : ''}` }, { id: 'tendencias', label: t('📈 Preços') }, { id: 'inventario', label: '🎒 Bens' }];
   return (
     <>
       <div className="card">
@@ -341,7 +341,7 @@ export function ShopPanel({ g }: { g: GameState }) {
         </div>
       </div>
       <div className="tabs compact">
-        {tabs.map((tb) => <button key={tb.id} className={sub === tb.id ? 'on' : ''} onClick={() => setSub(tb.id)}>{t(tb.label)}</button>)}
+        {tabs.map((tb) => <button key={tb.id} className={sub === tb.id ? 'on' : ''} onClick={() => setSub(tb.id)}>{tb.label.startsWith('🏷️') ? tb.label : t(tb.label)}</button>)}
       </div>
       {sub === 'lojas' && <Stores g={g} onOpen={setStore} />}
       {sub === 'ofertas' && <Offers g={g} />}

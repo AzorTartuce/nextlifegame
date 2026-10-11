@@ -160,10 +160,10 @@ export function lifeScore(g: GameState): { total: number; parts: { label: string
   const wealth = clamp(Math.log10(Math.max(1, worth)) - 2, 0, 5) * 40;
   const family = Math.min(100, npcsByRole(g, 'filho').length * 10 + (count(g, 'marriages') ? 20 : 0) + count(g, 'adopted') * 10);
   const parts = [
-    { label: 'Longevidade', pts: age * 3 },
-    { label: 'Riqueza', pts: wealth },
-    { label: 'Felicidade', pts: Math.round(avgHappiness(g) * 1.5) },
-    { label: 'Conquistas', pts: Math.min(240, g.ambitionsDone.length * 12) },
+    { label: t('Longevidade'), pts: age * 3 },
+    { label: t('Riqueza'), pts: wealth },
+    { label: t('Felicidade'), pts: Math.round(avgHappiness(g) * 1.5) },
+    { label: t('Conquistas'), pts: Math.min(240, g.ambitionsDone.length * 12) },
     { label: t('Família'), pts: family },
     { label: t('Caráter'), pts: Math.round(g.life.karma * 0.5) },
     { label: t('Crimes e prisão'), pts: -(count(g, 'crimes') * 4 + count(g, 'jailMonths')) },

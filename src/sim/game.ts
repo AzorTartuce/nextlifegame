@@ -28,7 +28,7 @@ export interface NewGameOptions {
   lastName: string;
   gender: Gender;
   attraction: Attraction;
-  /** Modo Deus: talento especial ao nascer (só vale se `premium`). */
+  /** Modo Destino: talento especial ao nascer (só vale se `premium`). */
   talent?: string;
   premium?: boolean;
   /** País e cidade de nascimento. Se omitidos, são sorteados. */

@@ -7,7 +7,7 @@ import { useGame } from '../../store';
 import { Avatar } from '../components/Avatar';
 import { Bar } from '../components/bits';
 import { ActionMenu } from '../components/ActionMenu';
-import { t } from '../../i18n';
+import { retranslate, t } from '../../i18n';
 
 const ROLE_LABEL: Record<Role, [string, string]> = {
   pai: ['Pai', 'Pai'], mae: ['Mãe', 'Mãe'], irmao: ['Irmão', 'Irmã'], amigo: ['Amigo', 'Amiga'],
@@ -30,7 +30,7 @@ function relColor(v: number) {
 function PersonCard({ g, n, open, onToggle }: { g: GameState; n: NPC; open: boolean; onToggle: () => void }) {
   const { run } = useGame();
   const age = ageYears(g, n);
-  const label = ROLE_LABEL[n.role][n.gender === 'f' ? 1 : 0];
+  const label = t(ROLE_LABEL[n.role][n.gender === 'f' ? 1 : 0]);
   const mem = n.memories[0];
   return (
     <div className={`person ${open ? 'open' : ''}`} onClick={onToggle} style={{ flexDirection: 'column', alignItems: 'stretch' }}>
@@ -40,7 +40,7 @@ function PersonCard({ g, n, open, onToggle }: { g: GameState; n: NPC; open: bool
           <b>{n.firstName} {n.lastName}</b>
           <div className="meta">{label} · {age}  {t('anos')}{!n.alive && n.deathT ? ` · ✝ ${formatDate(n.deathT)}` : ''}</div>
           {n.alive && <Bar value={n.relation} color={relColor(n.relation)} />}
-          {mem && !open && <div className="mem">“{mem.text}”</div>}
+          {mem && !open && <div className="mem">“{retranslate(mem.text)}”</div>}
         </div>
       </div>
       <AnimatePresence>
@@ -57,7 +57,7 @@ function PersonCard({ g, n, open, onToggle }: { g: GameState; n: NPC; open: bool
               <div style={{ marginTop: 10 }}>
                 <div className="small faint" style={{ fontWeight: 800 }}>{gx(n, t('Ele'), t('Ela'))}  {t('lembra de:')}</div>
                 {n.memories.slice(0, 5).map((m, i) => (
-                  <div key={i} className="mem">• {m.text} ({Math.floor(m.t / 12)})</div>
+                  <div key={i} className="mem">• {retranslate(m.text)} ({Math.floor(m.t / 12)})</div>
                 ))}
               </div>
             )}

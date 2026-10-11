@@ -6,6 +6,7 @@ import { setPremium as godSetPremium } from './sim/systems/god';
 import { ensureLife } from './sim/systems/lifestate';
 import { ensureShop, type CartLine } from './sim/systems/shop';
 import { act, advance, choose, continueAsHeir, newGame, type NewGameOptions } from './sim/game';
+import { autoAgenda } from './sim/systems/casual';
 import type { ActivityId, Deltas, GameState } from './sim/types';
 
 const SAVE_KEY = 'nextlife.save.v1';
@@ -24,9 +25,20 @@ interface Store {
   app: App;
   /** Fitas conquistadas ao longo de todas as vidas. */
   ribbons: Record<string, number>;
-  /** Modo Deus desbloqueado (guardado no aparelho). */
+  /** Modo Destino desbloqueado (guardado no aparelho). */
   premium: boolean;
   lang: Lang;
+  /** Modo casual (UI simplificada) e piloto automático da rotina; guardados no aparelho. */
+  casual: boolean;
+  autopilot: boolean;
+  /** Tutorial: fora da simulação. `open` = visível agora; `seen` = já concluído/pulado. */
+  tutorial: { open: boolean; step: number; seen: boolean };
+  setCasual: (on: boolean) => void;
+  applyAutopilot: () => void;
+  setAutopilot: (on: boolean) => void;
+  openTutorial: () => void;
+  setTutorialStep: (n: number) => void;
+  closeTutorial: () => void;
   cart: CartLine[];
   start: (opts: NewGameOptions) => void;
   advance: () => void;
@@ -112,6 +124,25 @@ function loadRibbons(): Record<string, number> {
   }
 }
 
+const CASUAL_KEY = 'nextlife.casual';
+const AUTOPILOT_KEY = 'nextlife.autopilot';
+const TUTORIAL_KEY = 'nextlife.tutorial.seen';
+function loadFlag(key: string, def: boolean): boolean {
+  try {
+    const v = localStorage.getItem(key);
+    return v === null ? def : v === '1';
+  } catch {
+    return def;
+  }
+}
+function saveFlag(key: string, on: boolean) {
+  try {
+    localStorage.setItem(key, on ? '1' : '0');
+  } catch {
+    /* sem armazenamento */
+  }
+}
+
 export const hasSave = () => loadSave() !== null;
 
 setLang(loadLang());
@@ -147,17 +178,46 @@ export const useGame = create<Store>((set, get) => {
     ribbons: loadRibbons(),
     premium: loadPremium(),
     lang: getLang(),
+    casual: loadFlag(CASUAL_KEY, false),
+    autopilot: loadFlag(AUTOPILOT_KEY, true),
+    tutorial: { open: false, step: 0, seen: loadFlag(TUTORIAL_KEY, false) },
     cart: [],
+
+    setCasual: (on) => {
+      saveFlag(CASUAL_KEY, on);
+      set({ casual: on });
+      if (on && get().autopilot) get().applyAutopilot();
+    },
+    setAutopilot: (on) => {
+      saveFlag(AUTOPILOT_KEY, on);
+      set({ autopilot: on });
+      if (on && get().casual) get().applyAutopilot();
+    },
+    applyAutopilot: () => {
+      const g = get().game;
+      if (!g || g.dead) return;
+      const next = { ...g, agenda: autoAgenda(g) };
+      set({ game: next });
+      persist(next);
+    },
+    openTutorial: () => set((s) => ({ tutorial: { ...s.tutorial, open: true, step: 0 } })),
+    setTutorialStep: (n) => set((s) => ({ tutorial: { ...s.tutorial, step: n } })),
+    closeTutorial: () => {
+      saveFlag(TUTORIAL_KEY, true);
+      set((s) => ({ tutorial: { ...s.tutorial, open: false, seen: true } }));
+    },
 
     start: (opts) => {
       const g = newGame({ ...opts, premium: get().premium });
-      set({ game: g, playing: false, tab: 'vida', pulse: null, cart: [], app: null });
-      persist(g);
+      set((s) => ({ game: g, playing: false, tab: 'vida', pulse: null, cart: [], app: null, tutorial: { open: !s.tutorial.seen, step: 0, seen: s.tutorial.seen } }));
+      if (get().casual && get().autopilot) get().applyAutopilot();
+      persist(get().game);
     },
 
     advance: () => {
-      const g = get().game;
+      let g = get().game;
       if (!g || g.pending || g.lastResult || g.dead || g.minigame) return;
+      if (get().casual && get().autopilot) g = { ...g, agenda: autoAgenda(g) };
       const next = advance(g);
       const stop = !!next.pending || !!next.dead;
       commit(g, next, stop ? { playing: false } : {});

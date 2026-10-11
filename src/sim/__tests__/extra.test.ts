@@ -116,7 +116,7 @@ describe('mais carreiras e cursos', () => {
   });
 });
 
-describe('Modo Deus', () => {
+describe('Modo Destino', () => {
   it('só funciona no premium e edita qualquer pessoa', () => {
     const g = adult();
     expect(godEdit(g, g.player.id, { stats: { carisma: 99 } })).toMatch(/premium/);

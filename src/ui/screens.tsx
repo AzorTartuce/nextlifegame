@@ -7,9 +7,10 @@ import { AMBITIONS } from '../sim/systems/ambitions';
 import type { Attraction, Gender, GameState, Person } from '../sim/types';
 import { useGame } from '../store';
 import { TALENTS } from '../sim/systems/god';
-import { fmtNum, t } from '../i18n';
+import { fmtNum, retranslate, t } from '../i18n';
 import { Avatar } from './components/Avatar';
 import { ScoreBlock } from './components/Ribbons';
+import { CasualToggle } from './tutorial/Casual';
 
 const rand = <T,>(a: readonly T[]) => a[Math.floor(Math.random() * a.length)];
 
@@ -109,10 +110,11 @@ export function NewGameScreen({ canContinue, onContinue }: { canContinue: boolea
           <div className="field">
             <label>⚡ {t('Talento ao nascer')} {!premium && '🔒'}</label>
             <select className="input" value={talent} disabled={!premium} onChange={(e) => setTalent(e.target.value)} aria-label={t('Talento ao nascer')}>
-              <option value="">{premium ? t('Nenhum') : t('Modo Deus: desbloqueie em Ajustes')}</option>
+              <option value="">{premium ? t('Nenhum') : t('Modo Destino: desbloqueie em Ajustes')}</option>
               {TALENTS.map((x) => <option key={x.id} value={x.id}>{x.icon} {t(x.name)}</option>)}
             </select>
           </div>
+          <CasualToggle compact />
           <button className="advance" style={{ width: '100%', marginTop: 6 }} disabled={!first.trim() || !last.trim()} onClick={() => { start({ firstName: first.trim(), lastName: last.trim(), gender, attraction, country: country.id, city, talent: premium && talent ? talent : undefined }); onContinue(); }}>
             
             {t('👶 Nascer em')} {city}
@@ -144,7 +146,7 @@ export function DeathScreen({ g }: { g: GameState }) {
           <div className="muted" style={{ fontWeight: 700 }}>
             {formatDate(g.player.birth)} — {formatDate(g.t)} · {age}  {t('anos')}
           </div>
-          <div className="faint small" style={{ marginTop: 4 }}>{t('Causa:')} {g.dead?.cause}</div>
+          <div className="faint small" style={{ marginTop: 4 }}>{t('Causa:')} {g.dead?.cause && retranslate(g.dead.cause)}</div>
           <div className="summary">
             <div className="fc"><div className="v">{formatMoney(netWorth(g), true)}</div><div className="l">{t('Patrimônio')}</div></div>
             <div className="fc"><div className="v">{kids.length}</div><div className="l">{t('Filhos vivos')}</div></div>
@@ -156,7 +158,7 @@ export function DeathScreen({ g }: { g: GameState }) {
             <div style={{ textAlign: 'left', marginBottom: 14 }}>
               <div className="group-title" style={{ marginTop: 0 }}>{t('Momentos marcantes')}</div>
               {highlights.map((h) => (
-                <div key={h.id} className="small" style={{ margin: '4px 0' }}>{h.icon} {h.text}</div>
+                <div key={h.id} className="small" style={{ margin: '4px 0' }}>{h.icon} {retranslate(h.text)}</div>
               ))}
             </div>
           )}

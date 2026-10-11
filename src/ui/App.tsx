@@ -14,6 +14,10 @@ import { PhonePanel } from './panels/PhonePanel';
 import { MinigameHost } from './minigames/MinigameHost';
 import { DeathScreen, NewGameScreen } from './screens';
 import { hasSavedLang, t } from '../i18n';
+import { CasualRoutine } from './tutorial/Casual';
+import { Tutorial } from './tutorial/Tutorial';
+import { AgeGate } from './legal/Legal';
+import { hasConfirmedAge } from './legal/docs';
 
 const TABS: { id: Tab; icon: string; label: string }[] = [
   { id: 'vida', icon: '📜', label: 'Vida' },
@@ -44,8 +48,9 @@ function Sky({ g }: { g: GameState | null }) {
 }
 
 function Panel({ tab, g }: { tab: Tab; g: GameState }) {
+  const casual = useGame((s) => s.casual);
   switch (tab) {
-    case 'rotina': return <AgendaPanel g={g} />;
+    case 'rotina': return casual ? <CasualRoutine g={g} /> : <AgendaPanel g={g} />;
     case 'carreira': return <CareerPanel g={g} />;
     case 'empresa': return <CompanyPanel g={g} />;
     case 'celular': return <PhonePanel g={g} />;
@@ -76,14 +81,16 @@ function Nav({ g, tab, setTab, tabs }: { g: GameState; tab: Tab; setTab: (t: Tab
 }
 
 function Game({ g }: { g: GameState }) {
-  const { tab, setTab } = useGame();
+  const { tab, setTab, casual } = useGame();
+  // Modo casual: Empresa só aparece na barra quando já existe uma (ou está aberta); o resto fica em Celular > Mais.
+  const shownTabs = casual ? TABS.filter((tb) => tb.id !== 'empresa' || g.company || tab === 'empresa') : TABS;
   const wide = useMediaQuery('(min-width: 1000px)');
   const sideTab = tab === 'vida' ? 'rotina' : tab;
 
   if (wide) {
-    const side = TABS.filter((tb) => tb.id !== 'vida');
+    const side = shownTabs.filter((tb) => tb.id !== 'vida');
     return (
-      <div className="app wide">
+      <div className={`app wide${casual ? ' casual' : ''}`}>
         <div className="col col-left">
           <Profile g={g} />
           <Ambitions g={g} />
@@ -111,22 +118,24 @@ function Game({ g }: { g: GameState }) {
         <MinigameHost g={g} />
         {g.dead && <DeathScreen g={g} />}
         <Toast />
+        <Tutorial g={g} />
       </div>
     );
   }
 
   return (
-    <div className="app">
+    <div className={`app${casual ? ' casual' : ''}`}>
       <Hud g={g} />
       <div className="scroll">
         <Panel tab={tab} g={g} />
       </div>
       <TimeBar g={g} />
-      <Nav g={g} tab={tab} setTab={setTab} tabs={TABS} />
+      <Nav g={g} tab={tab} setTab={setTab} tabs={shownTabs} />
       <EventScene g={g} />
       <MinigameHost g={g} />
       {g.dead && <DeathScreen g={g} />}
       <Toast />
+      <Tutorial g={g} />
     </div>
   );
 }
@@ -158,7 +167,9 @@ export function App() {
   // Um save existente abre direto no menu, com opção de continuar.
   const [inMenu, setInMenu] = useState(() => hasSave());
   const showMenu = !game || inMenu;
+  const [ageOk, setAgeOk] = useState(() => hasConfirmedAge());
   if (!langChosen) return <LanguageGate onPick={() => setLangChosen(true)} />;
+  if (!ageOk) return <AgeGate onAccept={() => setAgeOk(true)} />;
   return (
     <div key={lang} style={{ display: 'contents' }}>
       <Sky g={showMenu ? null : game} />

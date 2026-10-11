@@ -15,12 +15,12 @@ export const TALENTS: Talent[] = [
 
 addEn({
   ...Object.fromEntries(TALENTS.map((x) => [x.name, x.en])),
-  'O Modo Deus é um recurso premium.': 'God Mode is a premium feature.',
+  'O Modo Destino é um recurso premium.': 'Destiny Mode is a premium feature.',
   'Pessoa não encontrada.': 'Person not found.',
   'Você mexeu no destino de {n}.': 'You tampered with {n}’s fate.',
 });
 
-/** Talento especial ao nascer (Modo Deus): dá um empurrão numa área da vida. */
+/** Talento especial ao nascer (Modo Destino): dá um empurrão numa área da vida. */
 export function applyTalent(g: GameState, id: string) {
   g.life.talent = id;
   const s = g.player.stats;
@@ -51,9 +51,9 @@ export interface GodPatch {
   money?: number;
 }
 
-/** Modo Deus: mexe nos atributos do jogador ou de qualquer pessoa. */
+/** Modo Destino: mexe nos atributos do jogador ou de qualquer pessoa. */
 export function godEdit(g: GameState, targetId: string, patch: GodPatch): string {
-  if (!g.life.premium) return t('O Modo Deus é um recurso premium.');
+  if (!g.life.premium) return t('O Modo Destino é um recurso premium.');
   const npc = g.npcs[targetId];
   const person = targetId === g.player.id ? g.player : npc;
   if (!person) return t('Pessoa não encontrada.');

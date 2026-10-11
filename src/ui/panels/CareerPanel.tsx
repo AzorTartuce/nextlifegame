@@ -52,7 +52,7 @@ function JobCard({ g }: { g: GameState }) {
         <div className="ic">{c.icon}</div>
         <div className="grow">
           <div className="hud-name">{jobTitle(g)}</div>
-          <div className="small muted">{c.name} · {c.hours}{t('h/semana ·')} {Math.floor(job.monthsInRole / 12) > 0 ? `${Math.floor(job.monthsInRole / 12)}a ` : ''}{job.monthsInRole % 12}{t('m no cargo')}</div>
+          <div className="small muted">{t(c.name)} · {c.hours}{t('h/semana ·')} {Math.floor(job.monthsInRole / 12) > 0 ? `${Math.floor(job.monthsInRole / 12)}a ` : ''}{job.monthsInRole % 12}{t('m no cargo')}</div>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontWeight: 900 }}>{formatMoney(gross - incomeTax(gross))}</div>
@@ -152,7 +152,7 @@ function Offers({ g }: { g: GameState }) {
             <div className="ic">{c.icon}</div>
             <div className="grow">
               <b>{genderTitle(t(c.levels[o.level].title), g.player.gender)}</b>
-              <div className="small muted">{c.name} · {formatMoney(baseSalary(c.id, o.level))} · {c.hours}h</div>
+              <div className="small muted">{t(c.name)} · {formatMoney(baseSalary(c.id, o.level))} · {c.hours}h</div>
               {gaps.length > 0 && <div className="req">{t('Falta:')} {gaps.join(', ')}</div>}
             </div>
             <button className={`btn sm ${gaps.length ? '' : 'primary'}`} disabled={o.applied} onClick={() => run(applyForJob, i)}>

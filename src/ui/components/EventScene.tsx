@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { GameState } from '../../sim/types';
 import { useGame } from '../../store';
 import { DeltaChips } from './bits';
-import { t } from '../../i18n';
+import { retranslate, t } from '../../i18n';
 
 const PARTICLES: Record<string, string[]> = {
   casa: ['🏠', '🧸', '☕'],
@@ -90,8 +90,8 @@ export function EventScene({ g }: { g: GameState }) {
               >
                 <Art scene={p.scene} icon={p.icon} />
                 <div className="scene-body">
-                  <h2 className="scene-title">{p.title}</h2>
-                  <Typewriter text={p.text} />
+                  <h2 className="scene-title">{retranslate(p.title)}</h2>
+                  <Typewriter text={retranslate(p.text)} />
                   <div className="choices">
                     {p.choices.map((c, i) => (
                       <motion.button
@@ -102,8 +102,8 @@ export function EventScene({ g }: { g: GameState }) {
                         transition={{ delay: 0.25 + i * 0.07 }}
                         onClick={() => choose(c.index)}
                       >
-                        <span>{c.label}</span>
-                        {c.hint && <span className="hint">{c.hint}</span>}
+                        <span>{retranslate(c.label)}</span>
+                        {c.hint && <span className="hint">{retranslate(c.hint)}</span>}
                       </motion.button>
                     ))}
                   </div>
@@ -120,8 +120,8 @@ export function EventScene({ g }: { g: GameState }) {
               >
                 <Art scene={r.scene} icon={r.icon} />
                 <div className="scene-body">
-                  <h2 className="scene-title">{r.title}</h2>
-                  <Typewriter text={r.text} />
+                  <h2 className="scene-title">{retranslate(r.title)}</h2>
+                  <Typewriter text={retranslate(r.text)} />
                   <div className="deltas">
                     <DeltaChips deltas={r.deltas} />
                   </div>

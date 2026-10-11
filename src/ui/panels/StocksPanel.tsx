@@ -11,6 +11,7 @@ import { Bar } from '../components/bits';
 import { PriceChart } from '../components/PriceChart';
 import { TradeSheet, pct } from './TradeSheet';
 import { t } from '../../i18n';
+import { Disclaimer } from '../legal/Legal';
 
 type Sub = 'carteira' | 'mercado' | 'noticias';
 
@@ -174,7 +175,7 @@ function News({ g, onOpen }: { g: GameState; onOpen: (t: string) => void }) {
         <div className={`news news-${n.tone}`} key={n.id}>
           <div className="row small" style={{ gap: 6, flexWrap: 'wrap' }}>
             <span className="faint" style={{ fontWeight: 800 }}>{formatDate(n.t)}</span>
-            <span className="chip">{KIND_LABEL[n.kind]}</span>
+            <span className="chip">{t(KIND_LABEL[n.kind])}</span>
             {n.ticker && <button className="chip" onClick={() => onOpen(n.ticker!)}>{stockByTicker(n.ticker)?.flag} {n.ticker}</button>}
             {n.sector && !n.ticker && <span className="chip">{SECTOR_META[n.sector as StockSector]?.icon} {SECTOR_META[n.sector as StockSector]?.name}</span>}
             {n.group && !n.ticker && <span className="chip">{GROUP_META[n.group as StockGroup]?.flag} {GROUP_META[n.group as StockGroup]?.short}</span>}
@@ -209,6 +210,7 @@ export function StocksPanel({ g }: { g: GameState }) {
   return (
     <>
       <Header g={g} />
+      <Disclaimer kind="market" />
       <div className="tabs">
         {tabs.map((tb) => <button key={tb.id} className={sub === tb.id ? 'on' : ''} onClick={() => setSub(tb.id)}>{t(tb.label)}</button>)}
       </div>

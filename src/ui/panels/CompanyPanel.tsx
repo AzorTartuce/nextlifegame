@@ -36,7 +36,7 @@ function Founder({ g }: { g: GameState }) {
               <span className="e">{s.icon}</span>
               <b>{t(s.name)}</b>
               <span className={`small ${g.money >= s.startCost ? 'good' : 'bad'}`} style={{ fontWeight: 800 }}>{formatMoney(s.startCost)}</span>
-              <span className="small muted">{s.pitch}</span>
+              <span className="small muted">{t(s.pitch)}</span>
             </button>
           );
         })}
@@ -49,7 +49,7 @@ function Founder({ g }: { g: GameState }) {
         </div>
       </div>
       <button className="btn primary block" disabled={!!err} onClick={() => run(foundCompany, sector, name)}>
-        {err ?? `Fundar ${name || t('empresa')} 🚀`}
+        {err ?? t('Fundar {name} 🚀', { name: name || t('empresa') })}
       </button>
       {!g.flags.ideia_negocio && g.money < 20000 && <p className="small faint">{t('Dica: junte capital com emprego e bicos, ou peça ajuda à família.')}</p>}
     </div>

@@ -455,3 +455,13 @@ button.chip { cursor: pointer; border: 0; color: inherit; }
 .cards { display: flex; gap: 6px; justify-content: center; min-height: 56px; }
 .pcard { display: grid; place-items: center; width: 44px; height: 60px; border-radius: 8px; background: #f4f1ff; color: #1b1838; font-weight: 900; font-size: 15px; box-shadow: 0 4px 10px #0006; }
 .pcard.red { color: #c0392b; } .pcard.back { background: #3b3768; color: #fff; }
+
+/* Tutorial (coach-marks) e modo casual */
+.tour { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
+.tour-spot { position: fixed; border-radius: 14px; box-shadow: 0 0 0 9999px rgba(8, 6, 22, 0.62), 0 0 0 2px var(--accent-2); pointer-events: none; }
+.tour-card { position: fixed; overflow: auto; pointer-events: auto; background: var(--card-2); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; }
+.tour-card h4 { margin: 2px 0 6px; font-size: 16px; }
+.tour-card p { margin: 0 0 12px; font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+.tour-step { font-size: 11px; font-weight: 800; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.04em; }
+.tour-actions { display: flex; gap: 6px; align-items: center; }
+.app.casual .stat-label b { display: none; }

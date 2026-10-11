@@ -6,6 +6,7 @@ import {
 } from '../../sim/systems/casino';
 import type { GameState } from '../../sim/types';
 import { useGame } from '../../store';
+import { Disclaimer } from '../legal/Legal';
 
 type Tab = 'slots' | 'roleta' | 'cavalos' | 'blackjack';
 
@@ -227,6 +228,7 @@ export function CasinoPanel({ g }: { g: GameState }) {
   if (Math.floor((g.t - g.player.birth) / 12) < 18) return <div className="card empty"><span className="e">🎰</span>{t('O cassino só abre aos 18 anos.')}</div>;
   return (
     <>
+      <Disclaimer kind="casino" />
       <div className="card">
         <h3>🎰 {t('Cassino')} <span className="sub">{formatMoney(g.money)}</span></h3>
         <div className="small muted" style={{ marginBottom: 8 }}>{t('Aposta')}</div>

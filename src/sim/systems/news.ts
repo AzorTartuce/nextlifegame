@@ -27,23 +27,23 @@ export interface NewsProvider {
 const CAUSES: Record<StockSector, { pos: string[]; neg: string[] }> = {
   tecnologia: {
     pos: ['lança um produto que supera as expectativas', 'fecha contrato bilionário de computação em nuvem', 'apresenta avanço em inteligência artificial', 'amplia margens com serviços por assinatura'],
-    neg: ['adia o lançamento de um produto-chave', 'enfrenta investigação regulatória na Europa', 'sofre falha de segurança em serviço crítico', 'perde cliente estratégico para a concorrência'],
+    neg: ['adia o lançamento de um produto-chave', 'enfrenta novas regras de conformidade na Europa', 'adia uma atualização de segurança em um serviço', 'perde cliente estratégico para a concorrência'],
   },
   financeiro: {
     pos: ['reporta lucro recorde e eleva dividendos', 'vê a inadimplência cair', 'fecha aquisição que amplia a base de clientes'],
-    neg: ['provisiona perdas maiores com calotes', 'é multado pelo regulador', 'reporta lucro abaixo do esperado'],
+    neg: ['provisiona perdas maiores com calotes', 'paga mais que o previsto em taxas regulatórias', 'reporta lucro abaixo do esperado'],
   },
   energia: {
     pos: ['descobre um novo campo de produção', 'vê o preço do petróleo favorecer as margens', 'anuncia programa de recompra de ações'],
-    neg: ['interrompe a produção após vazamento em plataforma', 'corta a projeção de produção', 'enfrenta imposto extraordinário sobre lucros'],
+    neg: ['pausa a produção de uma plataforma para manutenção', 'corta a projeção de produção', 'enfrenta imposto extraordinário sobre lucros'],
   },
   saude: {
     pos: ['tem remédio aprovado na fase final de testes', 'anuncia resultado positivo em estudo clínico', 'amplia as vendas do tratamento líder'],
-    neg: ['vê estudo clínico fracassar', 'faz recall de lote de medicamentos', 'perde a patente do produto principal'],
+    neg: ['vê estudo clínico com resultado abaixo do esperado', 'revisa o estoque de um lote de medicamentos', 'perde a patente do produto principal'],
   },
   consumo: {
     pos: ['reajusta preços sem perder volume', 'lança linha de produtos de sucesso', 'reporta vendas acima do previsto'],
-    neg: ['perde participação de mercado para marcas rivais', 'enfrenta alta nos custos de matéria-prima', 'faz recall de um produto popular'],
+    neg: ['perde participação de mercado para marcas rivais', 'enfrenta alta nos custos de matéria-prima', 'descontinua um produto popular'],
   },
   varejo: {
     pos: ['bate recorde de vendas em semana de promoções', 'expande lojas com retorno rápido', 'reporta fluxo recorde de clientes'],
@@ -55,11 +55,11 @@ const CAUSES: Record<StockSector, { pos: string[]; neg: string[] }> = {
   },
   utilidades: {
     pos: ['recebe reajuste de tarifa favorável', 'tem investimento aprovado pelo regulador', 'reduz perdas operacionais'],
-    neg: ['sofre com a seca que reduz a geração', 'tem reajuste de tarifa negado', 'é multada por falhas no fornecimento'],
+    neg: ['sofre com a seca que reduz a geração', 'tem reajuste de tarifa negado', 'paga mais com ajustes exigidos pelo regulador'],
   },
   telecom: {
     pos: ['soma milhões de clientes com pacote de fibra', 'vê a receita por usuário crescer'],
-    neg: ['perde clientes para a operadora rival', 'enfrenta falha de rede em larga escala', 'paga mais caro que o previsto em leilão de espectro'],
+    neg: ['perde clientes para a operadora rival', 'enfrenta lentidão de rede em horário de pico', 'paga mais caro que o previsto em leilão de espectro'],
   },
   imobiliario: {
     pos: ['vende um lançamento inteiro em poucas horas', 'reporta recorde de reservas', 'vê demanda forte por novos bairros'],
@@ -67,11 +67,11 @@ const CAUSES: Record<StockSector, { pos: string[]; neg: string[] }> = {
   },
   materiais: {
     pos: ['se beneficia da alta no preço da commodity', 'reporta produção recorde', 'fecha contrato de longo prazo com compradores asiáticos'],
-    neg: ['vê a demanda da China enfraquecer', 'paralisa uma operação após acidente', 'reporta queda no preço de venda'],
+    neg: ['vê a demanda da China enfraquecer', 'paralisa uma operação para manutenção', 'reporta queda no preço de venda'],
   },
   cripto: {
     pos: ['recebe adoção anunciada por um grande banco', 'ganha aprovação de um fundo regulado', 'bate recorde de transações na rede'],
-    neg: ['sofre ataque hacker a uma grande corretora', 'é alvo de proibição em um grande mercado', 'perde a confiança após uma falha na rede'],
+    neg: ['vê instabilidade em uma grande corretora', 'enfrenta restrições em um grande mercado', 'perde fôlego após congestionamento na rede'],
   },
   luxo: {
     pos: ['vê a demanda aumentar na Ásia', 'lança uma coleção que esgota em dias', 'reporta vendas recordes'],

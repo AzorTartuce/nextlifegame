@@ -136,7 +136,7 @@ export function TradeSheet({ g, ticker, onClose }: { g: GameState; ticker: strin
         )}
 
         <div className="tabs" style={{ marginBottom: 10 }}>
-          {modes.map((m) => <button key={m.id} className={mode === m.id ? 'on' : ''} disabled={m.off} onClick={() => { setMode(m.id); setShare(m.id === 'sell' || m.id === 'cover' ? 100 : 25); }}>{m.label}</button>)}
+          {modes.map((m) => <button key={m.id} className={mode === m.id ? 'on' : ''} disabled={m.off} onClick={() => { setMode(m.id); setShare(m.id === 'sell' || m.id === 'cover' ? 100 : 25); }}>{t(m.label)}</button>)}
         </div>
         <input type="range" min={1} max={100} value={share} onChange={(e) => setShare(Number(e.target.value))} aria-label={t('Quantidade')} />
         <div className="btn-row" style={{ marginBottom: 8 }}>

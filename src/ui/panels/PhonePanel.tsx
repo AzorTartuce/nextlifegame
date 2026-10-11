@@ -1,9 +1,10 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { t } from '../../i18n';
 import { formatDate, formatMoney, placeLabel } from '../../sim/core';
 import { positions } from '../../sim/systems/valuation';
 import type { GameState } from '../../sim/types';
 import { useGame, type App } from '../../store';
+import { CASUAL_APPS } from '../tutorial/Casual';
 import { CasinoPanel } from './CasinoPanel';
 import { HealthPanel } from './HealthPanel';
 import { LazerPanel } from './LazerPanel';
@@ -60,7 +61,8 @@ export function registerApp(def: AppDef, before = 'ajustes') {
 }
 
 export function PhonePanel({ g }: { g: GameState }) {
-  const { app, setApp } = useGame();
+  const { app, setApp, casual, setTab } = useGame();
+  const [more, setMore] = useState(false);
   const current = APPS.find((a) => a.id === app);
 
   if (current) {
@@ -85,7 +87,7 @@ export function PhonePanel({ g }: { g: GameState }) {
         </div>
       </div>
       <div className="phone-grid">
-        {APPS.filter((a) => g.dead === null && Math.floor((g.t - g.player.birth) / 12) >= a.minAge).map((a) => {
+        {APPS.filter((a) => g.dead === null && Math.floor((g.t - g.player.birth) / 12) >= a.minAge && (!casual || more || CASUAL_APPS.includes(a.id))).map((a) => {
           const badge = a.badge?.(g);
           return (
             <button key={a.id} className="app-tile" onClick={() => setApp(a.id)}>
@@ -94,6 +96,18 @@ export function PhonePanel({ g }: { g: GameState }) {
             </button>
           );
         })}
+        {casual && more && g.company && (
+          <button className="app-tile" onClick={() => setTab('empresa')}>
+            <span className="app-ic">🏢</span>
+            <span>{t('Minha empresa')}</span>
+          </button>
+        )}
+        {casual && (
+          <button className="app-tile" onClick={() => setMore(!more)}>
+            <span className="app-ic">{more ? '➖' : '➕'}</span>
+            <span>{more ? t('Menos') : t('Mais')}</span>
+          </button>
+        )}
       </div>
     </div>
   );

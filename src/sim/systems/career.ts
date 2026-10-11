@@ -13,15 +13,15 @@ export function requirementGaps(g: GameState, c: CareerDef): string[] {
   const r = c.req;
   const s = g.player.stats;
   const gaps: string[] = [];
-  if (r.minAge && ageYears(g) < r.minAge) gaps.push(`${r.minAge}+ anos`);
+  if (r.minAge && ageYears(g) < r.minAge) gaps.push(t('{n}+ anos', { n: r.minAge }));
   if (c.cleanRecord && g.life.crime.record > 0) gaps.push(t('Ficha limpa'));
   if (r.edu && EDU_RANK[g.education.level] < EDU_RANK[r.edu]) gaps.push(r.edu === 'medio' ? t('Ensino médio') : t('Ensino superior'));
-  if (r.degree && !g.education.degrees.includes(r.degree)) gaps.push(`Diploma: ${COURSES[r.degree].name}`);
+  if (r.degree && !g.education.degrees.includes(r.degree)) gaps.push(t('Diploma: {d}', { d: t(COURSES[r.degree].name) }));
   if (r.license && !g.life.licenses[r.license]) gaps.push(t('Licença: {l}', { l: t(({ carro: 'carteira de motorista', aviao: 'brevê de piloto' } as Record<string, string>)[r.license] ?? r.license) }));
   if (r.inteligencia && s.inteligencia < r.inteligencia) gaps.push(t('Inteligência {inteligencia}', { inteligencia: r.inteligencia }));
   if (r.saude && s.saude < r.saude) gaps.push(t('Saúde {saude}', { saude: r.saude }));
   if (r.aparencia && s.aparencia < r.aparencia) gaps.push(t('Aparência {aparencia}', { aparencia: r.aparencia }));
-  if (r.carisma && s.carisma < r.carisma) gaps.push(`Carisma ${r.carisma}`);
+  if (r.carisma && s.carisma < r.carisma) gaps.push(t('Carisma {carisma}', { carisma: r.carisma }));
   return gaps;
 }
 
